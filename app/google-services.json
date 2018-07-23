@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "932116687828",
+    "firebase_url": "https://iotachat-8189a.firebaseio.com",
+    "project_id": "iotachat-8189a",
+    "storage_bucket": "iotachat-8189a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:932116687828:android:cbcf25c7c8cd83a3",
+        "android_client_info": {
+          "package_name": "com.companywesbite.iotachat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "932116687828-pc75uqlcoh36kdl5jt6h8ankmptf1v53.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.companywesbite.iotachat",
+            "certificate_hash": "3759abe3054e77753b9ecdd080568839e9bdfe4f"
+          }
+        },
+        {
+          "client_id": "932116687828-8e9d92ge9p1ffefvrv99o25vjk8louna.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5kJ_xnedZ6J4zd6dTzqJODQ2cC0Di-U0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "932116687828-8e9d92ge9p1ffefvrv99o25vjk8louna.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

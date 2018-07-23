@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RequestFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="110dp"
+        android:layout_marginLeft="10dp"
+        android:text="@string/friend_requests"
+        android:textSize="20dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="@string/refresh"
+        android:background="@color/colorAccent"
+        android:textColor="#ffff"
+        android:layout_marginTop="110dp"
+        android:id="@+id/refreshButton"
+        android:layout_gravity="right"
+        />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:id="@+id/friendRequestList"
+        android:layout_marginTop="140dp"></ListView>
+
+</FrameLayout>

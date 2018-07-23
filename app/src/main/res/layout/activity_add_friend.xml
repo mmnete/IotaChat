@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddFriend">
+
+
+    <include
+        android:id="@+id/addUserAppBar"
+        layout="@layout/app_bar_layout" />
+
+
+    <SearchView
+        android:id="@+id/searchUserInput"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="71dp"
+        android:hint="Search"
+        android:maxLines="1"
+      ></SearchView>
+
+    <ListView
+        android:id="@+id/currentUserList"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_marginTop="111dp"
+        />
+
+
+</RelativeLayout>
