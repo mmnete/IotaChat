@@ -212,6 +212,8 @@ public class AddFriend extends AppCompatActivity {
 class MySimpleArrayAdapter extends ArrayAdapter<User> {
 
 
+    private DatabaseReference notificationDatabase;
+
     private StorageReference storageReference;
 
     private DatabaseReference databaseReference;
@@ -226,6 +228,8 @@ class MySimpleArrayAdapter extends ArrayAdapter<User> {
         values = objects;
         this.storageReference = storageReference;
         this.currentUser = currentUser;
+
+        notificationDatabase = FirebaseDatabase.getInstance().getReference().child("notification");
 
 
     }
@@ -287,8 +291,23 @@ class MySimpleArrayAdapter extends ArrayAdapter<User> {
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful())
                             {
-                                add.setText("SENT");
-                                add.setBackgroundColor(Color.GREEN);
+
+
+                                HashMap<String, String> notificationData = new HashMap<>();
+                                notificationData.put("from",currentUser.getUid());
+                                notificationData.put("type","sent_request");
+                                notificationDatabase.child(s.userid).push().setValue(notificationData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+                                        add.setText("SENT");
+                                        add.setBackgroundColor(Color.GREEN);
+
+
+                                    }
+                                });
+
+
                             }else
                             {
                                 Toast.makeText(getContext(),"Could not send request!",Toast.LENGTH_LONG).show();

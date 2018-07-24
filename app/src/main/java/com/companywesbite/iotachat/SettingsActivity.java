@@ -37,6 +37,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -151,12 +153,12 @@ public class SettingsActivity extends AppCompatActivity {
 
         String uid = currentUser.getUid();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
 
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+        databaseReference.keepSynced(true);
 
 
         storageReference = FirebaseStorage.getInstance().getReference();
-
 
 
     }
@@ -166,6 +168,9 @@ public class SettingsActivity extends AppCompatActivity {
         super.onResume();
 
         //Update the current information....
+
+
+
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -177,10 +182,20 @@ public class SettingsActivity extends AppCompatActivity {
                 StorageReference finalRef = storageReference.child("profile_images").child(currentUser.getUid()+".jpg");
                 finalRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
-                    public void onSuccess(Uri uri) {
+                    public void onSuccess(final Uri uri) {
 
                         // The picaso library helps place the image there...
-                        Picasso.get().load(uri).into(userdp);
+                        Picasso.get().load(uri).networkPolicy(NetworkPolicy.OFFLINE).into(userdp, new Callback() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                Picasso.get().load(uri).into(userdp);
+                            }
+                        });
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {

@@ -15,9 +15,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -36,12 +40,16 @@ public class LoginActivity extends AppCompatActivity {
     //Firebase----
     private FirebaseAuth mAuth;
 
+    private DatabaseReference databaseReference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
 
         mToolBar = (Toolbar) findViewById(R.id.login_toolbar);
         setSupportActionBar(mToolBar);
@@ -104,11 +112,22 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (task.isSuccessful()) {
                     mLogProgress.dismiss();
-                    // Sign in success, update UI with the signed-in user's information
-                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(mainIntent);
-                    finish();
+
+                    String deviceToken  = FirebaseInstanceId.getInstance().getToken();
+                    String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                    databaseReference.child(user_id).child("device_token").setValue(deviceToken).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(mainIntent);
+                            finish();
+                        }
+                    });
+
+
 
                 } else {
                     // If sign in fails, display a message to the user.

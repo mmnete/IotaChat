@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
 
@@ -121,6 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
                             String userId = current_user.getUid();
+                            String deviceToken  = FirebaseInstanceId.getInstance().getToken();
 
                             databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
 
@@ -129,6 +131,10 @@ public class RegisterActivity extends AppCompatActivity {
                             userHash.put("status","Hi there I'm using Iota chat.");
                             userHash.put("image","default");
                             userHash.put("thumb_image","def");
+                            userHash.put("device_token", deviceToken);
+
+
+
 
                             databaseReference.setValue(userHash).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

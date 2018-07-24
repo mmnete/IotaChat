@@ -1,7 +1,6 @@
 package com.companywesbite.iotachat;
 
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
@@ -33,6 +32,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -51,14 +52,16 @@ public class RequestFragment extends Fragment {
 
     private DatabaseReference databaseReference;
 
-    private ProgressDialog progressDialog;
 
     private ListView listView;
     private Button refreshButton;
 
+    private DatabaseReference notificationDatabase;
+
     public RequestFragment() {
         // Required empty public constructor
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        notificationDatabase = FirebaseDatabase.getInstance().getReference().child("notification");
 
     }
 
@@ -67,7 +70,7 @@ public class RequestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        progressDialog = new ProgressDialog(getContext());
+
         View myView = inflater.inflate(R.layout.fragment_request, container, false);
         listView = (ListView) myView.findViewById(R.id.friendRequestList);
         refreshButton = (Button) myView.findViewById(R.id.refreshButton);
@@ -92,15 +95,16 @@ public class RequestFragment extends Fragment {
 
         DatabaseReference ref = databaseReference.child("FriendRequests").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
+        ref.keepSynced(true);
+
+
         final List<String> userIDs = new ArrayList<>();
         ref.orderByChild("request").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 userIDs.clear();
 
-                progressDialog.setTitle("Refreshing..");
-                progressDialog.setMessage("Checking for new requests");
-                progressDialog.show();
+
 
                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
 
@@ -113,7 +117,7 @@ public class RequestFragment extends Fragment {
                 for(int i = 0; i < userIDs.size(); i++)
                 {
                     DatabaseReference tempRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userIDs.get(i));
-
+                    tempRef.keepSynced(true);
 
                     final int finalI = i;
                     tempRef.addValueEventListener(new ValueEventListener() {
@@ -140,7 +144,7 @@ public class RequestFragment extends Fragment {
 
                 }
 
-                progressDialog.dismiss();
+
             }
 
             @Override
@@ -160,6 +164,8 @@ public class RequestFragment extends Fragment {
 class MyFriendRequestArrayAdapter extends ArrayAdapter<User> {
 
 
+    private DatabaseReference notificationDatabase;
+
     private StorageReference storageReference;
 
     private DatabaseReference databaseReference;
@@ -174,6 +180,7 @@ class MyFriendRequestArrayAdapter extends ArrayAdapter<User> {
         values = objects;
         this.storageReference = storageReference;
         this.currentUser = currentUser;
+        notificationDatabase = FirebaseDatabase.getInstance().getReference().child("notification");
     }
 
 
@@ -212,10 +219,24 @@ class MyFriendRequestArrayAdapter extends ArrayAdapter<User> {
                             requestQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
-                                        appleSnapshot.getRef().removeValue();
-                                        values.remove(position);
-                                        MyFriendRequestArrayAdapter.this.notifyDataSetChanged();
+                                    for (final DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
+
+                                        HashMap<String, String> notificationData = new HashMap<>();
+                                        notificationData.put("from",currentUser.getUid());
+                                        notificationData.put("type","accepted_request");
+                                        notificationDatabase.child(s.userid).push().setValue(notificationData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+
+                                                appleSnapshot.getRef().removeValue();
+                                                values.remove(position);
+                                                MyFriendRequestArrayAdapter.this.notifyDataSetChanged();
+
+
+                                            }
+                                        });
+
+
                                     }
 
                                     DatabaseReference  databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Friends").child(s.userid);
@@ -303,10 +324,20 @@ class MyFriendRequestArrayAdapter extends ArrayAdapter<User> {
         StorageReference finalRef = storageReference.child("profile_images").child(s.userid+".jpg");
         finalRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
-            public void onSuccess(Uri uri) {
+            public void onSuccess(final Uri uri) {
 
                 // The picaso library helps place the image there...
-                Picasso.get().load(uri).into(circleImageView);
+                Picasso.get().load(uri).networkPolicy(NetworkPolicy.OFFLINE).into(circleImageView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Picasso.get().load(uri).into(circleImageView);
+                    }
+                });
 
             }
         }).addOnFailureListener(new OnFailureListener() {

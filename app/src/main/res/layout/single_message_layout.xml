@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:padding="8dp"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hello There"
+        android:id="@+id/one_message"
+        android:background="@drawable/message_text_background"
+        android:textSize="14dp"
+        android:padding="8dp"
+        android:textColor="#ffff"/>
+
+    <TextView
+        android:id="@+id/one_message_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/one_message"
+        android:layout_below="@+id/one_message"
+        android:text="11:45"
+        android:textSize="5dp" />
+
+
+</RelativeLayout>

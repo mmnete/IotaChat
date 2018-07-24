@@ -23,4 +23,6 @@
     <string name="friend_requests">Friend Requests:</string>
     <string name="refresh">refresh</string>
     <string name="friends">Friends</string>
+    <string name="hello">Hello...</string>
+    <string name="send">send</string>
 </resources>

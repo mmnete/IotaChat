@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -30,6 +29,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -76,6 +77,7 @@ public class FriendsFragment extends Fragment {
 
         current_user = FirebaseAuth.getInstance().getCurrentUser();
         storageReference = FirebaseDatabase.getInstance().getReference().child("Friends").child(current_user.getUid());
+        storageReference.keepSynced(true);
         final List<String> myFriends_userIds = new ArrayList<>();
         final List<User> users = new ArrayList<>();
 
@@ -95,7 +97,7 @@ public class FriendsFragment extends Fragment {
                 {
 
                     DatabaseReference tempRef = FirebaseDatabase.getInstance().getReference().child("Users").child(myFriends_userIds.get(i));
-
+                    tempRef.keepSynced(true);
 
                     final int finalI = i;
                     tempRef.addValueEventListener(new ValueEventListener() {
@@ -108,16 +110,8 @@ public class FriendsFragment extends Fragment {
                             users.add(user);
                             if(finalI == users.size() - 1)
                             {
-                                final MyFriendListArrayAdapter myFriendListArrayAdapter = new MyFriendListArrayAdapter(getContext(), R.layout.friend_request_element, users, FirebaseStorage.getInstance().getReference(), FirebaseAuth.getInstance().getCurrentUser());
+                                final MyFriendListArrayAdapter myFriendListArrayAdapter = new MyFriendListArrayAdapter(getActivity(), R.layout.friend_request_element, users, FirebaseStorage.getInstance().getReference(), FirebaseAuth.getInstance().getCurrentUser());
                                 listView.setAdapter(myFriendListArrayAdapter);
-                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                        Intent profile_intent = new Intent(getContext(), ProfileActivity.class);
-                                        profile_intent.putExtra("userid", myFriendListArrayAdapter.getItem(i).userid);
-                                        startActivity(profile_intent);
-                                    }
-                                });
 
                             }
                         }
@@ -145,6 +139,7 @@ public class FriendsFragment extends Fragment {
 
 
     }
+
 }
 
 
@@ -184,18 +179,48 @@ class MyFriendListArrayAdapter extends ArrayAdapter<User> {
         View rowView = inflater.inflate(R.layout.friend_list_element, parent, false);
         textView = (TextView) rowView.findViewById(R.id.dpname);
 
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent profileIntent = new Intent(getContext(), ProfileActivity.class);
+                profileIntent.putExtra("userid",s.userid);
+                getContext().startActivity(profileIntent);
+            }
+        });
+
         final CircleImageView circleImageView = (CircleImageView) rowView.findViewById(R.id.userdp);
         final Button chat = (Button) rowView.findViewById(R.id.chatButton);
+        chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent chatIntent = new Intent(getContext(), ChatActivity.class);
+                chatIntent.putExtra("userid",s.userid);
+                getContext().startActivity(chatIntent);
+
+            }
+        });
 
 
         textView.setText(s.username);
         StorageReference finalRef = storageReference.child("profile_images").child(s.userid+".jpg");
         finalRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
-            public void onSuccess(Uri uri) {
+            public void onSuccess(final Uri uri) {
 
                 // The picaso library helps place the image there...
-                Picasso.get().load(uri).into(circleImageView);
+                // The picaso library helps place the image there...
+                Picasso.get().load(uri).networkPolicy(NetworkPolicy.OFFLINE).into(circleImageView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Picasso.get().load(uri).into(circleImageView);
+                    }
+                });
 
             }
         }).addOnFailureListener(new OnFailureListener() {
