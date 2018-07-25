@@ -68,10 +68,10 @@ public class ForgotPassword extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                               alert.setText("An reset password email has been sent to your email!");
+                               alert.setText("A reset password email has been sent to your email!");
                             }else
                             {
-                                alert.setText("Error: Make sure you have the right email please!");
+                                alert.setText("Error: Could not send password reset email. ");
                             }
                         }
                     });

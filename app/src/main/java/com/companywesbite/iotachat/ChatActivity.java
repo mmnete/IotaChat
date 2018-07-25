@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -386,7 +385,7 @@ public class ChatActivity extends AppCompatActivity {
                    prev_key = lastKey;
                 }
 
-                Log.d("TAG","The sender is: " + sms.getSender_id()+" The id of this mobile phone "+current_userid);
+                //Log.d("TAG","The sender is: " + sms.getSender_id()+" The id of this mobile phone "+current_userid);
                 smsList.add(sms);
                 messageAdapter.notifyDataSetChanged();
 

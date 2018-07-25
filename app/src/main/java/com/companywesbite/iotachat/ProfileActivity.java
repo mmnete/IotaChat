@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -110,6 +109,14 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         chatButton = (Button) findViewById(R.id.chatButton);
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent profileIntent = new Intent(ProfileActivity.this, ProfileActivity.class);
+                profileIntent.putExtra("userid",userid);
+                startActivity(profileIntent);
+            }
+        });
 
 
     }
@@ -137,7 +144,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle any errors
-                Log.d("TAG",exception.getMessage());
+             //   Log.d("TAG",exception.getMessage());
             }
         });
         DatabaseReference tempRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userid);

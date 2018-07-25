@@ -16,7 +16,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -67,6 +66,8 @@ public class SettingsActivity extends AppCompatActivity {
     private static final int PICK_FROM_GALLERY = 1;
 
     private StorageReference storageReference;
+
+    private Button deleteAccount;
 
 
 
@@ -202,7 +203,7 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
                         // Handle any errors
-                        Log.d("TAG",exception.getMessage());
+                     //   Log.d("TAG",exception.getMessage());
                     }
                 });
 
