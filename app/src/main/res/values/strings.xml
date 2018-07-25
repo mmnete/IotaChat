@@ -25,4 +25,6 @@
     <string name="friends">Friends</string>
     <string name="hello">Hello...</string>
     <string name="send">send</string>
+    <string name="enter_your_email_below_and_we_will_send_you_an_email_to_reset_your_password">Enter your email below and we will send you an email to reset your password:</string>
+    <string name="forgot_password">Forgot Password?</string>
 </resources>

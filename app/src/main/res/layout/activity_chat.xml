@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ChatActivity">
 
+
     <include
         android:id="@+id/chat_toolbar"
         layout="@layout/app_bar_layout"
@@ -25,11 +26,18 @@
         android:id="@+id/insertSms"
         android:orientation="horizontal">
 
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/clean"
+            android:id="@+id/clear_messages_button"
+            android:layout_weight="1"/>
+
         <EditText
             android:id="@+id/messageContainer"
             android:layout_width="350dp"
             android:layout_height="50dp"
-            android:layout_weight="9"
+            android:layout_weight="8"
             android:hint="@string/hello" />
 
         <Button
@@ -41,20 +49,33 @@
             android:background="@color/colorAccent"
             android:text="> >"
             android:textColor="#fff" />
+
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/chat_message_list"
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentTop="false"
-        android:layout_marginBottom="20dp"
-        android:layout_above="@+id/insertSms"
         android:layout_marginTop="65dp"
-        android:listSelector="@android:color/transparent"
-        android:transcriptMode="alwaysScroll"
-         />
+        android:layout_above="@+id/insertSms"
+        android:id="@+id/swipeLayout"
+        android:layout_marginBottom="30dp">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/chat_message_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentTop="false"
+            android:listSelector="@android:color/transparent"
+            android:transcriptMode="alwaysScroll"
+            app:reverseLayout="true"
+            app:stackFromEnd="true" />
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
 
 
 </RelativeLayout>

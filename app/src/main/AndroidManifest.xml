@@ -56,10 +56,12 @@
         <activity
             android:name=".ProfileActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ChatActivity"
-            android:screenOrientation="portrait"
+        <activity
+            android:name=".ChatActivity"
             android:parentActivityName=".MainActivity"
-            ></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".ForgotPassword"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

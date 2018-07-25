@@ -6,6 +6,7 @@ public class Messages{
     private String message, type, sender_id;
     private long time;
     private boolean seen;
+    public String sms_id = null;
 
     public Messages (String message, String type, String sender_id, long time, boolean seen)
     {

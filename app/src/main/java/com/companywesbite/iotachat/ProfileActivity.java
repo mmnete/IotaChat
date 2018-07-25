@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.companywesbite.iotachat.Util.UserActions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -67,6 +68,9 @@ public class ProfileActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
                             appleSnapshot.getRef().removeValue();
+
+                            //Delete all the messages from this user as well.....
+                            UserActions.deleteAllMessages(userid);
 
                             DatabaseReference tempref1 = FirebaseDatabase.getInstance().getReference();
                             Query requestQuery1 = tempref1.child("Friends").child(userid).orderByChild("friend").equalTo(current_user.getUid());

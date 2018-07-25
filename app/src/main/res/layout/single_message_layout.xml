@@ -5,14 +5,14 @@
     >
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hello There"
         android:id="@+id/one_message"
+        android:layout_width="266dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/message_text_background"
-        android:textSize="14dp"
         android:padding="8dp"
-        android:textColor="#ffff"/>
+        android:text="Hello There"
+        android:textColor="#ffff"
+        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/one_message_time"
@@ -22,6 +22,14 @@
         android:layout_below="@+id/one_message"
         android:text="11:45"
         android:textSize="5dp" />
+
+    <ImageView
+        android:id="@+id/cleanButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/clean" />
 
 
 </RelativeLayout>

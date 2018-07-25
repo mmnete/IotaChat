@@ -10,7 +10,6 @@ class SectionsPager extends FragmentPagerAdapter {
 
 
     RequestFragment requestFragment = new RequestFragment();
-    ChatsFragment chatsFragment = new ChatsFragment();
     FriendsFragment friendsFragment = new FriendsFragment();
 
     int pos = 0;
@@ -25,11 +24,9 @@ class SectionsPager extends FragmentPagerAdapter {
         switch(position)
         {
             case 0:
-                return requestFragment;
-            case 1:
-                return chatsFragment;
-            case 2:
                 return friendsFragment;
+            case 1:
+                return requestFragment;
             default:
                 return null;
         }
@@ -39,7 +36,7 @@ class SectionsPager extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
     @Nullable
@@ -48,11 +45,9 @@ class SectionsPager extends FragmentPagerAdapter {
         switch(position)
         {
             case 0:
-                 return "Friend Requests";
+                 return "Friends";
             case 1:
-                return "Chats";
-            case 2:
-                return "Friends";
+                return "Friend Requests";
             default:
                 return null;
         }
